@@ -2,9 +2,7 @@ package com.company.shippingdatabase.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -14,6 +12,9 @@ import java.util.Objects;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "invoice")
 public class Invoice {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "invoice_id")
     private Integer id;
     @NotNull

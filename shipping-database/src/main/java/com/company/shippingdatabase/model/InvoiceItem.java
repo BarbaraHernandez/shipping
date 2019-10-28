@@ -2,9 +2,7 @@ package com.company.shippingdatabase.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,8 +14,13 @@ import java.util.Objects;
 @Table(name = "invoice_item")
 public class InvoiceItem {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "invoice_item_id")
     private Integer itemId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id")
+    private Integer invoiceId;
     @NotNull
     @Column(name = "item_name")
     @Size(max = 50)
@@ -34,15 +37,17 @@ public class InvoiceItem {
     @Digits(integer=7,fraction=2)
     private BigDecimal shipCost;
 
-    public InvoiceItem(Integer itemId, @NotNull @Size(max = 50) String name, @NotNull @Size(max = 255) String description, @NotNull float weight, @NotNull @Digits(integer = 7, fraction = 2) BigDecimal shipCost) {
+    public InvoiceItem(Integer itemId, Integer invoiceId, @NotNull @Size(max = 50) String name, @NotNull @Size(max = 255) String description, @NotNull float weight, @NotNull @Digits(integer = 7, fraction = 2) BigDecimal shipCost) {
         this.itemId = itemId;
+        this.invoiceId = invoiceId;
         this.name = name;
         this.description = description;
         this.weight = weight;
         this.shipCost = shipCost;
     }
 
-    public InvoiceItem(@NotNull @Size(max = 50) String name, @NotNull @Size(max = 255) String description, @NotNull float weight, @NotNull @Digits(integer = 7, fraction = 2) BigDecimal shipCost) {
+    public InvoiceItem(Integer invoiceId, @NotNull @Size(max = 50) String name, @NotNull @Size(max = 255) String description, @NotNull float weight, @NotNull @Digits(integer = 7, fraction = 2) BigDecimal shipCost) {
+        this.invoiceId = invoiceId;
         this.name = name;
         this.description = description;
         this.weight = weight;
@@ -91,6 +96,14 @@ public class InvoiceItem {
         this.shipCost = shipCost;
     }
 
+    public Integer getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(Integer invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,6 +111,7 @@ public class InvoiceItem {
         InvoiceItem that = (InvoiceItem) o;
         return Float.compare(that.weight, weight) == 0 &&
                 Objects.equals(itemId, that.itemId) &&
+                invoiceId.equals(that.invoiceId) &&
                 name.equals(that.name) &&
                 description.equals(that.description) &&
                 shipCost.equals(that.shipCost);
@@ -105,13 +119,14 @@ public class InvoiceItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemId, name, description, weight, shipCost);
+        return Objects.hash(itemId, invoiceId, name, description, weight, shipCost);
     }
 
     @Override
     public String toString() {
         return "InvoiceItem{" +
                 "itemId=" + itemId +
+                ", invoiceId=" + invoiceId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", weight=" + weight +
