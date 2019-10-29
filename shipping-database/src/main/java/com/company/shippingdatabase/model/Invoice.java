@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +25,9 @@ public class Invoice {
     @Column (name = "shipto_zip")
     @Size (max = 5)
     private String zip;
+    @NotNull
+    @Column(name = "purchase_date")
+    private LocalDate purchaseDate;
     @NotNull
     @Column(name = "total_cost")
     private BigDecimal total;
@@ -82,22 +86,12 @@ public class Invoice {
         this.surcharge = surcharge;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Invoice invoice = (Invoice) o;
-        return Objects.equals(id, invoice.id) &&
-                customerId.equals(invoice.customerId) &&
-                zip.equals(invoice.zip) &&
-                total.equals(invoice.total) &&
-                tax.equals(invoice.tax) &&
-                surcharge.equals(invoice.surcharge);
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, customerId, zip, total, tax, surcharge);
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 
     @Override
@@ -106,24 +100,46 @@ public class Invoice {
                 "id=" + id +
                 ", customerId=" + customerId +
                 ", zip='" + zip + '\'' +
+                ", purchaseDate=" + purchaseDate +
                 ", total=" + total +
                 ", tax=" + tax +
                 ", surcharge=" + surcharge +
                 '}';
     }
 
-    public Invoice(@NotNull Integer customerId, @NotNull @Size(max = 5) String zip, @NotNull BigDecimal total, @NotNull BigDecimal tax, @NotNull BigDecimal surcharge) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Invoice invoice = (Invoice) o;
+        return Objects.equals(id, invoice.id) &&
+                customerId.equals(invoice.customerId) &&
+                zip.equals(invoice.zip) &&
+                purchaseDate.equals(invoice.purchaseDate) &&
+                total.equals(invoice.total) &&
+                tax.equals(invoice.tax) &&
+                surcharge.equals(invoice.surcharge);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, customerId, zip, purchaseDate, total, tax, surcharge);
+    }
+
+    public Invoice(Integer id, @NotNull Integer customerId, @NotNull @Size(max = 5) String zip, @NotNull LocalDate purchaseDate, @NotNull BigDecimal total, @NotNull BigDecimal tax, @NotNull BigDecimal surcharge) {
+        this.id = id;
         this.customerId = customerId;
         this.zip = zip;
+        this.purchaseDate = purchaseDate;
         this.total = total;
         this.tax = tax;
         this.surcharge = surcharge;
     }
 
-    public Invoice(Integer id, @NotNull Integer customerId, @NotNull @Size(max = 5) String zip, @NotNull BigDecimal total, @NotNull BigDecimal tax, @NotNull BigDecimal surcharge) {
-        this.id = id;
+    public Invoice(@NotNull Integer customerId, @NotNull @Size(max = 5) String zip, @NotNull LocalDate purchaseDate, @NotNull BigDecimal total, @NotNull BigDecimal tax, @NotNull BigDecimal surcharge) {
         this.customerId = customerId;
         this.zip = zip;
+        this.purchaseDate = purchaseDate;
         this.total = total;
         this.tax = tax;
         this.surcharge = surcharge;

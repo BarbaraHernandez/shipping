@@ -18,8 +18,9 @@ public class InvoiceItem {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "invoice_item_id")
     private Integer itemId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "invoice_id")
+    @Column(name = "invoice_id")
     private Integer invoiceId;
     @NotNull
     @Column(name = "item_name")
@@ -121,6 +122,19 @@ public class InvoiceItem {
     public int hashCode() {
         return Objects.hash(itemId, invoiceId, name, description, weight, shipCost);
     }
+
+//    @Override
+//    public String toString() {
+//        return "InvoiceItem{" +
+//                "itemId=" + itemId +
+//                ", invoiceId=" + invoiceId +
+//                ", name='" + name + '\'' +
+//                ", description='" + description + '\'' +
+//                ", weight=" + weight +
+//                ", shipCost=" + shipCost +
+//                '}';
+//    }
+
 
     @Override
     public String toString() {

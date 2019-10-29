@@ -33,12 +33,15 @@ class InvoiceItemRepositoryTest {
                 "item",
                 "good item",
                 (float)20.20,
-                new BigDecimal(5.00)
+                new BigDecimal("5.00")
         );
 
         item1 = repo.save(item1);
 
-        InvoiceItem checkItem = repo.getOne(item1.getItemId());
+        //get one is not appropriate for testing
+        //it will close session
+        //return reference
+        InvoiceItem checkItem = repo.findById(item1.getItemId()).get();
 
         assertEquals(item1, checkItem);
     }
@@ -50,14 +53,14 @@ class InvoiceItemRepositoryTest {
                 "item",
                 "good item",
                 (float)20.20,
-                new BigDecimal(5.00)
+                new BigDecimal("5.00")
         );
         InvoiceItem item2 = new InvoiceItem(
                 1,
                 "item2",
                 "gooder item",
                 (float)30.30,
-                new BigDecimal(15.00)
+                new BigDecimal("15.00")
         );
         item1 = repo.save(item1);
         item2 = repo.save(item2);
@@ -78,14 +81,14 @@ class InvoiceItemRepositoryTest {
                 "item",
                 "good item",
                 (float)20.20,
-                new BigDecimal(5.00)
+                new BigDecimal("5.00")
         );
         InvoiceItem item2 = new InvoiceItem(
                 1,
                 "item2",
                 "gooder item",
                 (float)30.30,
-                new BigDecimal(15.00)
+                new BigDecimal("15.00")
         );
         item1 = repo.save(item1);
         item2 = repo.save(item2);
